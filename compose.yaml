@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-8097}:8000"
+    environment:
+      API_KEY: ${API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      GENERATION_MODEL: ${GENERATION_MODEL:-openai/gpt-6-luna-pro}
+      EVALUATION_MODEL: ${EVALUATION_MODEL:-typesafe/jev-1.13}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

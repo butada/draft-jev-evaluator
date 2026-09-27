@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ja">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>原稿比較 / Jev</title></head>
+<body>
+<header><div><span class="eyebrow">DRAFT LAB / PROTOTYPE</span><h1>原稿をつくる。比べる。</h1></div><span id="models" class="muted"></span></header>
+<main>
+
+<details id="setup" open class="panel"><summary>元情報とプロンプト</summary>
+<form id="form"><fieldset id="inputs">
+<p id="mode-info" class="hint">新しい比較を作成します。</p>
+<div class="run-settings"><label>実行名（任意）<input id="run-name" maxlength="120" placeholder="例：見出しの違いを比較"></label>
+<div class="model-picker"><div class="row"><strong>生成モデル</strong><span class="hint">料金は100万トークン当たりUSD</span></div><div class="model-picker-fields"><label>モデル名で候補を絞り込む<input id="model-search" type="search" placeholder="GPT、Claude、Gemini、モデルIDなど"></label>
+<label>候補から選択<select id="generation-model" required><option value="">モデル一覧を取得中…</option></select></label></div>
+<div class="row start"><span id="model-info" class="hint"></span><button type="button" id="reload-models">一覧を再取得</button></div></div></div>
+<label class="effort-control">Reasoning Effort<select id="effort" required><option value="">モデルを選んでください</option></select></label><p id="effort-info" class="hint"></p>
+<div class="input-grid"><label>元情報<textarea id="source" rows="12" maxlength="60000" required placeholder="解説のもとになる情報を貼り付けてください"></textarea></label>
+<div><div class="row"><strong>生成プロンプト</strong><button type="button" id="add">＋ 追加</button></div><div id="prompts"></div><div class="row start"><button type="button" id="restore-prompts">ブラウザ保存済みのプロンプトに戻す</button><span id="prompt-storage" class="hint"></span></div></div></div>
+<div class="row start"><label>生成数（有効な各プロンプトにつき） <input id="count" type="number" min="1" max="20" value="1" required></label><span id="allocation" class="muted"></span></div>
+<button type="button" class="primary" id="run">生成してJevで評価</button> <button type="button" id="new-mode" hidden>新しい比較として生成するモードに戻る</button><span class="hint"> 実行結果は自動保存されます。生成10並列 / Jev評価3並列。</span>
+</fieldset></form></details>
+<details class="panel" id="criteria-panel"><summary>評価基準を編集</summary>
+<p class="hint">保存した基準は次の新規生成から使います。過去の結果への追加生成は、その結果に保存された基準を使います。重み・NG閾値は固定です。</p>
+<form id="criteria-form"><fieldset id="criteria-fields"><div id="criteria-editor"></div>
+<div class="row start"><button type="button" id="save-criteria" class="primary">評価基準を保存</button><button type="button" id="reset-criteria">保存済みの基準に戻す</button><span id="criteria-status" class="hint" role="status"></span></div>
+</fieldset></form></details>
+<p id="message" role="status" aria-live="polite"></p>
+<section class="panel results"><div class="row"><nav aria-label="結果の表示"><button data-view="overview" class="active">全体一覧</button><button data-view="text">文章を比較</button><button data-view="evaluation">評価を比較</button></nav><span id="progress" class="muted">まだ生成していません</span></div>
+<div class="row start append-actions"><button type="button" id="append-mode" hidden>別モデルで追加生成</button><button type="button" id="delete-selected" class="delete-button" hidden>選択した結果を削除</button><span id="append-hint" class="hint"></span></div>
+<p id="auto-best-info" class="hint"></p><p id="run-info" class="hint"></p><p id="run-cost" class="hint"></p><div id="selection"></div><div id="results"><div class="empty">元情報とプロンプトを入力して、候補を生成してください。<br>各候補の文章と評価をここで比較できます。</div></div></section>
+<details class="panel" id="history-panel"><summary>実行履歴・お気に入り</summary>
+<div class="row start history-controls"><label><input type="checkbox" id="favorite-only"> ★ お気に入りありのみ</label><button type="button" id="refresh-history">更新</button><span class="hint">履歴を開くと、元情報・プロンプト・結果を呼び出せます。</span></div>
+<div class="row start"><button type="button" id="merge-runs" disabled>選択した履歴をマージ</button><span class="hint">条件が一致する履歴を新しい履歴へまとめます。元の履歴も残ります。</span></div><p id="history-message" role="status"></p><div id="history"></div></details>
+</main><script type="module" src="/src.js"></script>
+</body></html>
